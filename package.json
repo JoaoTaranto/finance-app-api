@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "npx husky install",
+    "postinstall": "sh -c npx husky install",
     "prepare": "husky"
   },
   "keywords": [],
@@ -20,5 +20,10 @@
     "husky": "^8.0.3",
     "lint-staged": "^16.1.4",
     "prettier": "^3.6.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
   }
 }
