@@ -1,4 +1,3 @@
-import { PostgresHelper } from "../database/postgres/helper.js";
 import { CreateUserUseCase } from "../use-cases/create-user.js";
 import { badRequest, created, serverError } from "./helpers.js";
 
@@ -28,14 +27,6 @@ export class CreateUserController {
                 return badRequest({
                     message: "Invalid e-mail. Please provide a valid one",
                 });
-            }
-
-            const usedEmail = await PostgresHelper.query(
-                "SELECT * FROM users WHERE email = $1",
-                [params.email],
-            );
-            if (usedEmail) {
-                return badRequest({ message: "This email is already in use!" });
             }
 
             const passwordIsValid = params.password.length >= 6;
