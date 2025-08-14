@@ -40,7 +40,6 @@ export class CreateUserController {
             // CREATE USER
             const createUserUseCase = new CreateUserUseCase();
             const createdUser = await createUserUseCase.execute(params);
-            console.log(createdUser);
             return created(createdUser);
         } catch (error) {
             if (error instanceof EmailAlreadyInUseError) {
