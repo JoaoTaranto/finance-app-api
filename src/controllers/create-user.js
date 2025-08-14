@@ -1,3 +1,4 @@
+import { EmailAlreadyInUseError } from "../errors/user.js";
 import { CreateUserUseCase } from "../use-cases/create-user.js";
 import { badRequest, created, serverError } from "./helpers.js";
 
@@ -38,10 +39,14 @@ export class CreateUserController {
 
             // CREATE USER
             const createUserUseCase = new CreateUserUseCase();
-            const createdUser = createUserUseCase.execute(params);
+            const createdUser = await createUserUseCase.execute(params);
             console.log(createdUser);
             return created(createdUser);
         } catch (error) {
+            if (error instanceof EmailAlreadyInUseError) {
+                return badRequest({ message: error.message });
+            }
+
             console.error(error);
             return serverError();
         }
