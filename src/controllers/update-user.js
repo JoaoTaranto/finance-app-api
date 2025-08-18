@@ -1,8 +1,16 @@
-import validator from "validator";
-import { badRequest, ok } from "./helpers.js";
 import { EmailAlreadyInUseError } from "../errors/user.js";
 import { UpdateUserUseCase } from "../use-cases/update-user.js";
-import { serverError } from "./helpers.js";
+import {
+    badRequest,
+    ok,
+    serverError,
+    checkIfEmailIsValid,
+    checkIfIdIsValid,
+    checkIfPasswordIsValid,
+    emailIsInvalidResponse,
+    IsIdInvalidResponse,
+    passwordIsInvalidResponse,
+} from "./helpers/index.js";
 
 export class UpdateUserController {
     async execute(httpRequest) {
@@ -10,14 +18,10 @@ export class UpdateUserController {
             // console.log(httpRequest);
             const userId = httpRequest.params.userId;
 
-            const isIdValid = validator.isUUID(userId);
-            if (!isIdValid) {
-                return badRequest({
-                    message: "The provided id is not valid",
-                });
-            }
+            const isIdValid = checkIfIdIsValid(userId);
+            if (!isIdValid) return IsIdInvalidResponse();
 
-            const updateUserParams = httpRequest.body; // UNDEFINED???
+            const params = httpRequest.body; // UNDEFINED???
             const allowedFields = [
                 "first_name",
                 "last_name",
@@ -25,8 +29,8 @@ export class UpdateUserController {
                 "password",
             ];
 
-            console.log(updateUserParams);
-            const someFieldIsNotValid = Object.keys(updateUserParams).some(
+            console.log(params);
+            const someFieldIsNotValid = Object.keys(params).some(
                 (field) => !allowedFields.includes(field),
             );
             if (someFieldIsNotValid) {
@@ -35,29 +39,14 @@ export class UpdateUserController {
                 });
             }
 
-            if (updateUserParams.email) {
-                const emailIsValid = validator.isEmail(updateUserParams.email);
-                if (!emailIsValid) {
-                    return badRequest({
-                        message: "Invalid e-mail. Please provide a valid one",
-                    });
-                }
-            }
+            const emailIsValid = checkIfEmailIsValid(params.email);
+            if (!emailIsValid) return emailIsInvalidResponse();
 
-            if (updateUserParams.password) {
-                const passwordIsValid = updateUserParams.password.length >= 6;
-                if (!passwordIsValid) {
-                    return badRequest({
-                        message: "Password must be at least 6 characters",
-                    });
-                }
-            }
+            const passwordIsValid = checkIfPasswordIsValid(params.password);
+            if (!passwordIsValid) return passwordIsInvalidResponse;
 
             const updateUserUseCase = new UpdateUserUseCase();
-            const updatedUser = await updateUserUseCase.execute(
-                userId,
-                updateUserParams,
-            );
+            const updatedUser = await updateUserUseCase.execute(userId, params);
             return ok(updatedUser);
         } catch (error) {
             if (error instanceof EmailAlreadyInUseError) {

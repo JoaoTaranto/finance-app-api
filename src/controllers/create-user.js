@@ -1,8 +1,14 @@
 import { EmailAlreadyInUseError } from "../errors/user.js";
 import { CreateUserUseCase } from "../use-cases/create-user.js";
-import { badRequest, created, serverError } from "./helpers.js";
-
-import validator from "validator";
+import {
+    badRequest,
+    created,
+    serverError,
+    checkIfEmailIsValid,
+    checkIfPasswordIsValid,
+    emailIsInvalidResponse,
+    passwordIsInvalidResponse,
+} from "./helpers/index.js";
 
 export class CreateUserController {
     // GET REQUESTS
@@ -23,19 +29,11 @@ export class CreateUserController {
                 }
             }
 
-            const emailIsValid = validator.isEmail(params.email);
-            if (!emailIsValid) {
-                return badRequest({
-                    message: "Invalid e-mail. Please provide a valid one",
-                });
-            }
+            const emailIsValid = checkIfEmailIsValid(params.email);
+            if (!emailIsValid) return emailIsInvalidResponse();
 
-            const passwordIsValid = params.password.length >= 6;
-            if (!passwordIsValid) {
-                return badRequest({
-                    message: "Password must be at least 6 characters",
-                });
-            }
+            const passwordIsValid = checkIfPasswordIsValid(params.password);
+            if (!passwordIsValid) return passwordIsInvalidResponse();
 
             // CREATE USER
             const createUserUseCase = new CreateUserUseCase();
