@@ -39,11 +39,15 @@ export class UpdateUserController {
                 });
             }
 
-            const emailIsValid = checkIfEmailIsValid(params.email);
-            if (!emailIsValid) return emailIsInvalidResponse();
+            if (params.email) {
+                const emailIsValid = checkIfEmailIsValid(params.email);
+                if (!emailIsValid) return emailIsInvalidResponse();
+            }
 
-            const passwordIsValid = checkIfPasswordIsValid(params.password);
-            if (!passwordIsValid) return passwordIsInvalidResponse;
+            if (params.password) {
+                const passwordIsValid = checkIfPasswordIsValid(params.password);
+                if (!passwordIsValid) return passwordIsInvalidResponse;
+            }
 
             const updateUserUseCase = new UpdateUserUseCase();
             const updatedUser = await updateUserUseCase.execute(userId, params);
