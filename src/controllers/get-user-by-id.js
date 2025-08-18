@@ -1,4 +1,4 @@
-import { GetUserByIdUseCase } from "../use-cases/get-user-by-id.js";
+import { GetUserByIdUseCase } from "../use-cases/index.js";
 import {
     checkIfIdIsValid,
     IsIdInvalidResponse,
@@ -9,7 +9,7 @@ import {
 export class GetUserByIdController {
     async execute(httpRequest) {
         try {
-            const isIdValid = checkIfIdIsValid(httpRequest.params.id);
+            const isIdValid = checkIfIdIsValid(httpRequest.params.userId);
             if (!isIdValid) return IsIdInvalidResponse();
 
             const getUserByIdUseCase = new GetUserByIdUseCase();

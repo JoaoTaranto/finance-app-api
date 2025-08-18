@@ -1,5 +1,5 @@
 import { EmailAlreadyInUseError } from "../errors/user.js";
-import { UpdateUserUseCase } from "../use-cases/update-user.js";
+import { UpdateUserUseCase } from "../use-cases/index.js";
 import {
     badRequest,
     ok,
@@ -46,7 +46,7 @@ export class UpdateUserController {
 
             if (params.password) {
                 const passwordIsValid = checkIfPasswordIsValid(params.password);
-                if (!passwordIsValid) return passwordIsInvalidResponse;
+                if (!passwordIsValid) return passwordIsInvalidResponse();
             }
 
             const updateUserUseCase = new UpdateUserUseCase();
