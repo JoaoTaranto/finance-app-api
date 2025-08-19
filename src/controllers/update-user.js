@@ -17,7 +17,6 @@ export class UpdateUserController {
     }
     async execute(httpRequest) {
         try {
-            // console.log(httpRequest);
             const userId = httpRequest.params.userId;
 
             const isIdValid = checkIfIdIsValid(userId);
@@ -31,7 +30,6 @@ export class UpdateUserController {
                 "password",
             ];
 
-            console.log(params);
             const someFieldIsNotValid = Object.keys(params).some(
                 (field) => !allowedFields.includes(field),
             );
