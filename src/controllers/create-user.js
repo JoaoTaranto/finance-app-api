@@ -1,5 +1,4 @@
 import { EmailAlreadyInUseError } from "../errors/user.js";
-import { CreateUserUseCase } from "../use-cases/index.js";
 import {
     badRequest,
     created,
@@ -11,6 +10,10 @@ import {
 } from "./helpers/index.js";
 
 export class CreateUserController {
+    constructor(createUserUseCase) {
+        this.createUserUseCase = createUserUseCase;
+    }
+
     // GET REQUESTS
     async execute(httpRequest) {
         try {
@@ -36,8 +39,7 @@ export class CreateUserController {
             if (!passwordIsValid) return passwordIsInvalidResponse();
 
             // CREATE USER
-            const createUserUseCase = new CreateUserUseCase();
-            const createdUser = await createUserUseCase.execute(params);
+            const createdUser = await this.createUserUseCase.execute(params);
             return created(createdUser);
         } catch (error) {
             if (error instanceof EmailAlreadyInUseError) {
