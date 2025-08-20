@@ -1,4 +1,7 @@
-import { EmailAlreadyInUseError } from "../../errors/user.js";
+import {
+    EmailAlreadyInUseError,
+    UserNotFoundError,
+} from "../../errors/user.js";
 import {
     badRequest,
     ok,
@@ -9,6 +12,7 @@ import {
     emailIsInvalidResponse,
     IsIdInvalidResponse,
     passwordIsInvalidResponse,
+    userNotFoundResponse,
 } from "../helpers/index.js";
 
 export class UpdateUserController {
@@ -58,6 +62,9 @@ export class UpdateUserController {
             if (error instanceof EmailAlreadyInUseError) {
                 return badRequest({ message: error.message });
             }
+            if (error instanceof UserNotFoundError)
+                return userNotFoundResponse();
+
             console.error(error);
             return serverError();
         }
