@@ -1,4 +1,5 @@
-import checkIfIdIsValid, {
+import {
+    checkIfIdIsValid,
     checkIfAmountIsValid,
     invalidAmountResponse,
     IsIdInvalidResponse,
