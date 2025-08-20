@@ -1,6 +1,7 @@
+import { UserNotFoundError } from "../../errors/user.js";
+
 import {
     IsIdInvalidResponse,
-    UserNotFoundError,
     checkIfIdIsValid,
     ok,
     requiredFieldIsMissingResponse,
