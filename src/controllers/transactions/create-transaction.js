@@ -4,7 +4,7 @@ import {
     created,
     IsIdInvalidResponse,
     serverError,
-} from "../helpers";
+} from "../helpers/index.js";
 import validator from "validator";
 
 export class CreateTransactionController {
@@ -16,15 +16,19 @@ export class CreateTransactionController {
             const params = httpRequest.body;
 
             const requiredFields = [
-                "first_name",
-                "last_name",
-                "email",
-                "password",
+                "user_id",
+                "name",
+                "date",
+                "amount",
+                "type",
             ];
 
             // VALIDATIONS
             for (const field of requiredFields) {
-                if (!params[field] || params[field].trim().length === 0) {
+                if (
+                    !params[field] ||
+                    params[field].toString().trim().length === 0
+                ) {
                     return badRequest({ message: `Missing param: ${field}` });
                 }
             }
@@ -32,11 +36,18 @@ export class CreateTransactionController {
             const userIdIsValid = checkIfIdIsValid(params.user_id);
 
             if (!userIdIsValid) {
-                IsIdInvalidResponse();
+                return IsIdInvalidResponse();
+            }
+
+            const dateIsValid = validator.isDate(params.date);
+            if (!dateIsValid) {
+                return badRequest({
+                    message: `The ${params.date} is not a valid date!`,
+                });
             }
 
             if (params.amount <= 0) {
-                badRequest({
+                return badRequest({
                     message: "The amount must be greater than 0.",
                 });
             }
@@ -51,7 +62,7 @@ export class CreateTransactionController {
             );
 
             if (!amountIsValid) {
-                badRequest({
+                return badRequest({
                     message: "The amount must be a valid currency",
                 });
             }
@@ -63,7 +74,7 @@ export class CreateTransactionController {
             );
 
             if (!typeIsValid) {
-                badRequest({
+                return badRequest({
                     message: "The type must be EARNING, EXPENSE or INVESTMENT",
                 });
             }
