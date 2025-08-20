@@ -1,9 +1,9 @@
-import { ṔostgresHelper } from "../../../database/postgres/helper.js";
+import { PostgresHelper } from "../../../database/postgres/helper.js";
 
 export class PostgresCreateTransactionRepository {
     async execute(createTransactionParams) {
-        const createdTransaction = await ṔostgresHelper.query(
-            "INSERT INTO transactions (ID, user_id, name, date, amount, type) VALUES ($1, $2, $3, $4, $5, $6)",
+        const createdTransaction = await PostgresHelper.query(
+            "INSERT INTO transactions (ID, user_id, name, date, amount, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
             [
                 createTransactionParams.ID,
                 createTransactionParams.user_id,
@@ -13,6 +13,6 @@ export class PostgresCreateTransactionRepository {
                 createTransactionParams.type,
             ],
         );
-        return createdTransaction;
+        return createdTransaction[0];
     }
 }
