@@ -16,7 +16,7 @@ export class CreateTransactionUseCase {
         const user = await this.postgresGetUserByIdRepository.execute(userId);
 
         if (!user) {
-            throw new UserNotFoundError(userId);
+            throw new UserNotFoundError();
         }
 
         const transaction_id = uuidv4();

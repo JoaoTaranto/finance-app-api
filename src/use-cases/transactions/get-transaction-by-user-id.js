@@ -15,7 +15,7 @@ export class GetTransactionsByUserIdUseCase {
         );
 
         if (!user) {
-            throw new UserNotFoundError(params.userId);
+            throw new UserNotFoundError();
         }
         const transactions =
             await this.postgresGetTransactionsByUserIdRepository.execute(
