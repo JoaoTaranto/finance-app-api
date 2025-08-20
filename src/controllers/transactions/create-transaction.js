@@ -5,6 +5,7 @@ import {
     IsIdInvalidResponse,
     serverError,
     validateRequiredFields,
+    requiredFieldIsMissingResponse,
 } from "../helpers/index.js";
 import validator from "validator";
 
@@ -29,9 +30,7 @@ export class CreateTransactionController {
                 validateRequiredFields(params, requiredFields);
 
             if (!requiredFieldsWereProvided) {
-                return badRequest({
-                    message: `The field ${missingField} is required`,
-                });
+                return requiredFieldIsMissingResponse(missingField);
             }
             // console.log(requiredFields.ok);
 
