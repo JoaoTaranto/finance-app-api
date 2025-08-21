@@ -8,3 +8,4 @@ export * from "./transactions/create-transaction.js";
 export * from "./transactions/get-transaction-by-user-id.js";
 export * from "./transactions/update-transaction.js";
 export * from "./transactions/get-transaction-by-id.js";
+export * from "./transactions/delete-transaction.js";
