@@ -18,9 +18,10 @@ export class DeleteTransactionController {
 
             if (!idIsValid) return IsIdInvalidResponse();
 
-            const deletedTransaction = await this.deleteTransactionUseCase(
-                httpRequest.params.transactionId,
-            );
+            const deletedTransaction =
+                await this.deleteTransactionUseCase.execute(
+                    httpRequest.params.transactionId,
+                );
 
             if (!deletedTransaction) return transactionNotFoundResponse();
 
