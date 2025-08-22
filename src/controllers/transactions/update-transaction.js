@@ -1,4 +1,3 @@
-import { TransactionNotFoundError } from "../../errors/transaction.js";
 import {
     checkIfIdIsValid,
     checkIfAmountIsValid,
@@ -51,10 +50,10 @@ export class UpdateTransactionController {
                     httpRequest.params.transactionId,
                     params,
                 );
+
+            if (!updatedTransaction[0]) return transactionNotFoundResponse();
             return ok(updatedTransaction);
         } catch (error) {
-            if (error instanceof TransactionNotFoundError)
-                return transactionNotFoundResponse();
             console.error(error);
             return serverError();
         }
