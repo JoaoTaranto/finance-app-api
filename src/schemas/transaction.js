@@ -17,4 +17,6 @@ export const CreateTransactionSchema = z.strictObject(
     { error: "Some provided field is not allowed" },
 );
 
-export const UpdateTransactionSchema = CreateTransactionSchema.partial();
+export const UpdateTransactionSchema = CreateTransactionSchema.omit({
+    user_id: true,
+}).partial();
