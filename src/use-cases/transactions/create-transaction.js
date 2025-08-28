@@ -24,7 +24,7 @@ export class CreateTransactionUseCase {
         const transaction =
             await this.postgresCreateTransactionRepository.execute({
                 ...createTransactionParams,
-                ID: transaction_id,
+                id: transaction_id,
             });
 
         return transaction;
