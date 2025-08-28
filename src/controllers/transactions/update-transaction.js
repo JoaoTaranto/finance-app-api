@@ -30,7 +30,7 @@ export class UpdateTransactionController {
                     params,
                 );
 
-            if (!updatedTransaction[0]) return transactionNotFoundResponse();
+            if (!updatedTransaction) return transactionNotFoundResponse();
             return ok(updatedTransaction);
         } catch (error) {
             if (error instanceof ZodError)
