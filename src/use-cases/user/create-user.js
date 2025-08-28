@@ -26,7 +26,7 @@ export class CreateUserUseCase {
 
         const user = {
             ...createUserParams,
-            ID: userId,
+            id: userId,
             password: hashedPassword,
         };
 

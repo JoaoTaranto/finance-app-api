@@ -1,21 +1,17 @@
-import { PostgresHelper } from "../../../database/postgres/helper.js";
-
+import { prisma } from "../../../../prisma/prisma.js";
 export class PostgresCreateUserRepository {
     async execute(CreateUserParams) {
-        await PostgresHelper.query(
-            "INSERT INTO users (ID, first_name, last_name, email, password) VALUES ($1, $2, $3, $4, $5)",
-            [
-                CreateUserParams.ID,
-                CreateUserParams.first_name,
-                CreateUserParams.last_name,
-                CreateUserParams.email,
-                CreateUserParams.password,
-            ],
-        );
-        const createdUser = await PostgresHelper.query(
-            "SELECT * FROM users WHERE ID = $1",
-            [CreateUserParams.ID],
-        );
-        return createdUser[0];
+        console.log(CreateUserParams);
+        const user = await prisma.user.create({
+            data: {
+                id: CreateUserParams.id,
+                first_name: CreateUserParams.first_name,
+                last_name: CreateUserParams.last_name,
+                email: CreateUserParams.email,
+                password: CreateUserParams.password,
+            },
+        });
+
+        return user;
     }
 }
